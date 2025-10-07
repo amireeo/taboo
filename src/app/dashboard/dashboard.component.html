@@ -1,0 +1,70 @@
+<app-navbar></app-navbar>
+<div class="dashboard-container">
+  <!-- Header Section -->
+  <div class="dashboard-header">
+    <h1 class="dashboard-title">Dashboard</h1>
+    <div class="header-controls">
+      <button class="date-picker-btn">
+        <img src="assets/icons/calendar.svg" alt="Calendar" width="20" height="20">
+        {{ selectedDateRange }}
+      </button>
+      <button class="filters-btn">
+        <img src="assets/icons/filter.svg" alt="Filter" width="20" height="20">
+        Filters
+      </button>
+      <button class="download-btn">
+        <img src="assets/icons/download.svg" alt="Download" width="20" height="20">
+      </button>
+    </div>
+  </div>
+
+  <!-- Stat Cards -->
+  <div class="stat-cards">
+    <div class="stat-card" *ngFor="let card of statCards">
+      <div class="stat-label">{{ card.label }}</div>
+      <div class="stat-value">{{ card.value }}</div>
+    </div>
+  </div>
+
+
+  <div class="chart-section" *ngIf="false">
+  <!-- Chart Section -->
+  <div class="chart-section">
+    <h2 class="chart-title">State of All Systems</h2>
+    <div class="chart-container">
+      <!-- Legend -->
+      <div class="chart-legend">
+        <div class="legend-item" *ngFor="let item of chartData">
+          <span class="legend-dot" [style.background-color]="item.color"></span>
+          <span class="legend-label">{{ item.legendLabel }}</span>
+        </div>
+      </div>
+
+      <!-- Chart -->
+        <div class="chart">
+        <!-- Y-axis -->
+        <div class="y-axis">
+          <div class="y-label" *ngFor="let label of getYAxisLabels()">
+            {{ label | number }}
+          </div>
+        </div>
+
+        <!-- Bars -->
+        <div class="bars-container">
+          <div class="bar-wrapper" *ngFor="let item of chartData">
+            <div class="bar-column">
+              <div class="bar-value" *ngIf="item.value > 0">{{ item.value | number }}</div>
+              <div 
+                class="bar" 
+                [style.height.%]="getBarHeight(item.value)"
+                [style.background-color]="item.color">
+              </div>
+            </div>
+            <div class="bar-label">{{ item.label }}</div>
+          </div>
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+</div>

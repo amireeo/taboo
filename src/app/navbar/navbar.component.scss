@@ -1,0 +1,124 @@
+@use '../../styles/variables' as *;
+
+.navbar {
+  background: $card-background;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+  box-shadow: 0 1px 35px 2px rgba(0, 0, 0, 0.08);
+}
+
+.navbar-container {
+  max-width: 1364px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 80px;
+}
+
+.navbar-logo {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+
+  svg, img {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+}
+
+.navbar-menu {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  li {
+    position: relative;
+
+    &.active {
+      .nav-link {
+        color: $primary-color;
+
+        &::after {
+          width: 100%;
+        }
+      }
+    }
+  }
+}
+
+.nav-link {
+  display: block;
+  padding: 8px 0;
+  color: $text-secondary;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 600;
+  font-family: $font-family;
+  letter-spacing: 0.02em;
+  transition: color 0.3s ease;
+  white-space: nowrap;
+  position: relative;
+  border-radius: 2px;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: $primary-color;
+    transition: width 0.3s ease;
+  }
+
+  &:hover {
+    color: $primary-color;
+    
+    &::after {
+      width: 100%;
+    }
+  }
+}
+
+.navbar-profile {
+  display: flex;
+  align-items: center;
+  
+  .profile-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    object-fit: cover;
+
+    &:hover {
+      transform: scale(1.05);
+    }
+  }
+}
+
+@media (max-width: 1440px) {
+  .navbar-container {
+    padding: 0 40px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .navbar-menu {
+    gap: 16px;
+  }
+
+  .nav-link {
+    font-size: 14px;
+    letter-spacing: 1px;
+  }
+}
