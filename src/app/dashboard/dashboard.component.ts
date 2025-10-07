@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NavbarComponent } from '../navbar/navbar.component';
+import { GraphqlService, SystemStats } from '../services/graphql.service';
+
 interface StatCard {
   label: string;
   value: string;
@@ -20,14 +22,15 @@ interface ChartData {
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
   selectedDateRange = 'Jan 01, 2024 - Jan 30, 2024';
+  isLoading = false;
 
   statCards: StatCard[] = [
-    { label: 'Total Systems Count', value: '6,449' },
-    { label: 'Hybrid with Batteries', value: '3,563' },
-    { label: 'Hybrid without Batteries', value: '1,488' },
-    { label: 'On Grid', value: '1,398' }
+    { label: 'Total Systems Count', value: '0' },
+    { label: 'Hybrid with Batteries', value: '0' },
+    { label: 'Hybrid without Batteries', value: '0' },
+    { label: 'On Grid', value: '0' }
   ];
 
   chartData: ChartData[] = [
@@ -42,6 +45,38 @@ export class DashboardComponent {
   ];
 
   maxValue = Math.max(...this.chartData.map(d => d.value));
+
+  constructor(private graphqlServices: GraphqlService) {}
+
+  ngOnInit(): void {
+    this.loadSystemStats();
+  }
+
+  loadSystemStats(): void {
+    this.isLoading = true;
+    const userId = '2c2a2670-51df-44e1-af98-e7e87a7ddf68';
+    
+    this.graphqlServices.getSystemStats(userId).subscribe({
+      next: (stats: SystemStats) => {
+        this.statCards = [
+          { label: 'Total Systems Count', value: this.formatNumber(stats.totalSystemsCount) },
+          { label: 'Hybrid with Batteries', value: this.formatNumber(stats.hybridWithBatteries) },
+          { label: 'Hybrid without Batteries', value: this.formatNumber(stats.hybridWithoutBatteries) },
+          { label: 'On Grid', value: this.formatNumber(stats.onGrid) }
+        ];
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.error('Error fetching system stats:', error);
+        this.isLoading = false;
+        // Keep default values on error
+      }
+    });
+  }
+
+  formatNumber(num: number): string {
+    return num.toLocaleString();
+  }
 
   getBarHeight(value: number): number {
     return (value / this.maxValue) * 100;
