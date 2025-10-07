@@ -97,12 +97,7 @@
     height: 44px;
     border-radius: 50%;
     cursor: pointer;
-    transition: transform 0.2s ease;
     object-fit: cover;
-
-    &:hover {
-      transform: scale(1.05);
-    }
   }
 }
 
